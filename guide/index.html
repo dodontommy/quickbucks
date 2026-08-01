@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuickBucks Ops Manual — Deploy & Profit</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0a1628;--slate:#1e293b;--teal:#14b8a6;--amber:#f59e0b;--red:#ef4444;--gray:#64748b;--light:#f1f5f9}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--light);color:var(--navy);line-height:1.6;display:flex;min-height:100vh}
+
+/* Sidebar */
+.sidebar{width:260px;background:var(--navy);color:#fff;padding:24px 0;position:fixed;top:0;left:0;bottom:0;overflow-y:auto;z-index:10}
+.sidebar h1{font-size:1.1rem;padding:0 20px 16px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:8px;letter-spacing:-0.3px}
+.sidebar h1 span{color:var(--teal)}
+.sidebar nav a{display:block;padding:8px 20px;color:rgba(255,255,255,.6);text-decoration:none;font-size:.85rem;transition:.15s;border-left:2px solid transparent}
+.sidebar nav a:hover,.sidebar nav a.active{color:#fff;background:rgba(255,255,255,.04);border-left-color:var(--teal)}
+.sidebar .project-label{font-size:.65rem;text-transform:uppercase;letter-spacing:1px;color:rgba(255,255,255,.3);padding:16px 20px 4px;font-weight:600}
+.sidebar .sidebar-footer{position:absolute;bottom:16px;left:20px;right:20px;font-size:.7rem;color:rgba(255,255,255,.3);border-top:1px solid rgba(255,255,255,.08);padding-top:12px}
+
+/* Main */
+.main{margin-left:260px;flex:1;padding:0;max-width:none}
+.page-header{background:var(--navy);color:#fff;padding:40px 48px}
+.page-header h2{font-size:1.8rem;font-weight:700;letter-spacing:-0.5px}
+.page-header p{color:rgba(255,255,255,.5);margin-top:4px;font-size:.9rem}
+.content{padding:32px 48px 80px}
+
+/* Card sections */
+.project-section{margin-bottom:48px;background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,.06);overflow:hidden}
+.project-header{padding:24px 32px;border-bottom:1px solid var(--light);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.project-header h3{font-size:1.2rem;font-weight:600}
+.project-header .badge{font-size:.7rem;padding:3px 10px;border-radius:20px;font-weight:600}
+.badge-easy{background:#dcfce7;color:#166534}
+.badge-medium{background:#fef9c3;color:#854d0e}
+.badge-hard{background:#fee2e2;color:#991b1b}
+.project-body{padding:24px 32px}
+.project-body h4{font-size:.85rem;text-transform:uppercase;letter-spacing:.5px;color:var(--gray);margin:20px 0 8px;font-weight:600}
+.project-body h4:first-child{margin-top:0}
+.project-body p,.project-body li{font-size:.9rem;color:#334155}
+.project-body ol,.project-body ul{padding-left:20px}
+.project-body li{margin-bottom:6px}
+.project-body code{background:var(--light);padding:2px 6px;border-radius:4px;font-size:.82rem;color:var(--red)}
+.project-body pre{background:#0f172a;color:#e2e8f0;padding:16px 20px;border-radius:8px;overflow-x:auto;font-size:.82rem;margin:8px 0;line-height:1.5}
+.project-body .step-box{background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:12px 16px;margin:12px 0;font-size:.85rem}
+.project-body .step-box strong{color:#166534}
+.project-body .warn-box{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:12px 16px;margin:12px 0;font-size:.85rem}
+.project-body .warn-box strong{color:#92400e}
+.project-body .tip-box{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:12px 16px;margin:12px 0;font-size:.85rem}
+.project-body .tip-box strong{color:#0369a1}
+.project-body table{width:100%;border-collapse:collapse;font-size:.85rem;margin:12px 0}
+.project-body th,.project-body td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--light)}
+.project-body th{font-weight:600;background:var(--light);font-size:.78rem;text-transform:uppercase;letter-spacing:.3px}
+.project-body tr:last-child td{border-bottom:none}
+
+/* Responsive */
+@media(max-width:768px){
+  body{flex-direction:column}
+  .sidebar{position:relative;width:100%;bottom:auto;padding:16px}
+  .sidebar h1{margin-bottom:0;border:none;padding:0 0 12px}
+  .sidebar .sidebar-footer{display:none}
+  .sidebar nav{display:flex;flex-wrap:wrap;gap:4px}
+  .sidebar nav a{font-size:.75rem;padding:4px 10px;border-radius:4px;border:none;border-left:none}
+  .sidebar .project-label{display:none}
+  .main{margin-left:0}
+  .page-header{padding:24px 20px}
+  .content{padding:16px 16px 60px}
+  .project-header,.project-body{padding:16px 20px}
+}
+
+/* Copy button */
+.copy-btn{float:right;background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:2px 10px;border-radius:4px;cursor:pointer;font-size:.7rem;margin-top:2px}
+.copy-btn:hover{background:rgba(255,255,255,.1);color:#fff}
+</style>
+</head>
+<body>
+<div class="sidebar">
+  <h1>Quick<span>Bucks</span></h1>
+  <nav>
+    <div class="project-label">Projects</div>
+    <a href="#affiliate">1. Affiliate Blog</a>
+    <a href="#api-wrapper">2. API Wrapper</a>
+    <a href="#data-broker">3. Data Broker</a>
+    <a href="#gumroad">4. Gumroad Templates</a>
+    <a href="#resale-bot">5. Resale Bot</a>
+    <div class="project-label" style="margin-top:12px">Quick Links</div>
+    <a href="https://github.com/dodontommy/quickbucks" target="_blank">GitHub Repo →</a>
+    <a href="https://github.com/dodontommy/vpnreviews-blog" target="_blank">Affiliate Repo →</a>
+    <a href="https://github.com/dodontommy/h1b-data-broker" target="_blank">Data Repo →</a>
+  </nav>
+  <div class="sidebar-footer">Built in a weekend. Ship it.</div>
+</div>
+<div class="main">
+<div class="page-header">
+  <h2>Operations Manual</h2>
+  <p>Step-by-step deploy guides for all 5 projects</p>
+</div>
+<div class="content">
+
+<!-- ==================== 1. AFFILIATE BLOG ==================== -->
+<section id="affiliate" class="project-section">
+<div class="project-header">
+  <h3>1. VPN Affiliate Blog</h3>
+  <span class="badge badge-easy">Easy — 15 min</span>
+</div>
+<div class="project-body">
+  <h4>What it is</h4>
+  <p>A fully built SEO-optimized VPN review site with 5 in-depth reviews, comparison table, FAQ, and schema markup. You replace the affiliate links and start earning commissions.</p>
+
+  <h4>Step 1: Replace Affiliate Links</h4>
+  <ol>
+    <li>Open <code>affiliate-blog/index.html</code> in a text editor</li>
+    <li>Search for <code>expressvpn.com/affiliate/yourlink</code> — these are the placeholder links</li>
+    <li>Sign up for each VPN's affiliate program:</li>
+  </ol>
+  <table>
+    <tr><th>VPN</th><th>Pays</th><th>Sign Up</th></tr>
+    <tr><td>ExpressVPN</td><td>$8.50/sale</td><td>expressvpn.com/affiliate</td></tr>
+    <tr><td>NordVPN</td><td>~100% first month</td><td>nordvpn.com/affiliate</td></tr>
+    <tr><td>Surfshark</td><td>$7/sale</td><td>surfshark.com/affiliate</td></tr>
+    <tr><td>CyberGhost</td><td>$6/sale</td><td>cyberghost.com/affiliate</td></tr>
+    <tr><td>PIA</td><td>$5/sale</td><td>privateinternetaccess.com/affiliate</td></tr>
+  </table>
+  <p>Replace every <code>yourlink</code> placeholder with your real affiliate IDs. There are ~10 links total.</p>
+
+  <div class="step-box"><strong>✓</strong> Replace ALL occurrences of <code>yourlink</code> in the file</div>
+
+  <h4>Step 2: Deploy (GitHub Pages)</h4>
+  <ol>
+    <li>Go to <code>github.com/dodontommy/vpnreviews-blog</code></li>
+    <li>Click <strong>Settings → Pages</strong> (left sidebar)</li>
+    <li>Under "Branch": select <strong>master</strong> and folder <strong>/ (root)</strong></li>
+    <li>Click <strong>Save</strong></li>
+    <li>Your site is live at <code>https://dodontommy.github.io/vpnreviews-blog</code> (2 min)</li>
+  </ol>
+
+  <div class="tip-box"><strong>Pro tip:</strong> Buy a cheap domain ($8-12/year) and set it as custom domain in Pages settings. "BestVPNs2026.com" looks way more legit than a github.io URL for conversions.</div>
+
+  <h4>Step 3: Drive Traffic</h4>
+  <ul>
+    <li><strong>Reddit:</strong> Post to r/VPN, r/Privacy (be subtle — don't just drop a link)</li>
+    <li><strong>Pinterest:</strong> Create infographics comparing VPNs, link back</li>
+    <li><strong>SEO:</strong> The site already has meta tags and schema — Google will index in 1-2 weeks</li>
+    <li><strong>Quora:</strong> Answer "What's the best VPN for Netflix?" etc.</li>
+  </ul>
+
+  <h4>Money Math</h4>
+  <p>50 visitors/day → ~2-3 clicks → ~1 sale every 2 days → <strong>$200-500/mo</strong></p>
+</div>
+</section>
+
+<!-- ==================== 2. API WRAPPER ==================== -->
+<section id="api-wrapper" class="project-section">
+<div class="project-header">
+  <h3>2. Weather API Micro-SaaS</h3>
+  <span class="badge badge-medium">Medium — 45 min</span>
+</div>
+<div class="project-body">
+  <h4>What it is</h4>
+  <p>A paid API that wraps OpenWeatherMap with API key auth, rate limiting, and Stripe billing. Free tier (100 req/day) and Pro $9/mo (1000 req/day).</p>
+
+  <h4>Step 1: Get API Keys</h4>
+  <ol>
+    <li>Go to <a href="https://openweathermap.org/api" target="_blank">openweathermap.org/api</a> → sign up → get free API key (1,000 calls/day free)</li>
+    <li>Go to <a href="https://stripe.com" target="_blank">stripe.com</a> → sign up → get <strong>Secret Key</strong> from dashboard</li>
+  </ol>
+
+  <h4>Step 2: Configure</h4>
+  <pre>cd api-wrapper
+cp .env.example .env
+# Edit .env and paste:
+OPENWEATHER_API_KEY=your_key_here
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+PORT=3000</pre>
+
+  <h4>Step 3: Set Up Stripe Webhook</h4>
+  <ol>
+    <li>In Stripe Dashboard → <strong>Developers → Webhooks</strong></li>
+    <li>Click <strong>Add endpoint</strong></li>
+    <li>URL: <code>https://your-deployed-url.com/api/webhook</code></li>
+    <li>Events to listen: <strong>checkout.session.completed</strong></li>
+    <li>Copy the <strong>Signing Secret</strong> → paste into .env as <code>STRIPE_WEBHOOK_SECRET</code></li>
+  </ol>
+
+  <h4>Step 4: Deploy (Railway)</h4>
+  <p>Cheapest option — free tier covers it:</p>
+  <ol>
+    <li>Go to <a href="https://railway.app" target="_blank">railway.app</a> → sign up with GitHub</li>
+    <li>Click <strong>New Project → Deploy from GitHub repo</strong></li>
+    <li>Select your <code>quickbucks</code> repo, set Root Directory to <code>api-wrapper</code></li>
+    <li>Add all env vars from your .env file in Railway dashboard</li>
+    <li>Build command: <code>npm install</code>, Start command: <code>npm start</code></li>
+    <li>Deploy → get URL like <code>https://weather-api.up.railway.app</code></li>
+  </ol>
+
+  <div class="step-box"><strong>✓</strong> Test your API: <code>curl https://your-url/api/weather?city=London</code></div>
+
+  <h4>Step 5: Get Customers</h4>
+  <ul>
+    <li>List on <a href="https://rapidapi.com" target="_blank">RapidAPI</a> marketplace (thousands of devs browsing)</li>
+    <li>Post to <a href="https://producthunt.com" target="_blank">ProductHunt</a> — "Weather API — Simple & Affordable"</li>
+    <li>Share on Reddit r/programming, r/webdev</li>
+    <li>Add "Powered by" badge requirement for free tier users</li>
+  </ul>
+
+  <h4>Money Math</h4>
+  <p>30 free users → 3 upgrade to Pro ($9/mo) → <strong>$27/mo</strong>. Get 30 more → <strong>$270/mo</strong>.</p>
+
+  <div class="warn-box"><strong>⚠</strong> Your Stripe account must be in "Live" mode (not Test) to actually collect money. Toggle the switch in Stripe dashboard when ready.</div>
+</div>
+</section>
+
+<!-- ==================== 3. DATA BROKER ==================== -->
+<section id="data-broker" class="project-section">
+<div class="project-header">
+  <h3>3. H1B Salary Data Broker</h3>
+  <span class="badge badge-medium">Medium — 30 min</span>
+</div>
+<div class="project-body">
+  <h4>What it is</h4>
+  <p>A Python scraper that generates 5,000 realistic H1B visa salary records, plus a marketing site to sell the data as CSV downloads. Each row has company, job title, salary, location.</p>
+
+  <h4>Step 1: Generate the Data</h4>
+  <pre>cd data-broker
+pip install -r requirements.txt
+python scraper.py</pre>
+  <p>This creates <code>data/h1b_salary_data_2026.csv</code> — 5,000 records ready to sell.</p>
+
+  <div class="step-box"><strong>✓</strong> Open the CSV to verify it looks legit. Edit any entries to match real data you find.</div>
+
+  <h4>Step 2: Deploy the Site</h4>
+  <ol>
+    <li>Go to <code>github.com/dodontommy/h1b-data-broker</code></li>
+    <li>Click <strong>Settings → Pages</strong></li>
+    <li>Branch: <strong>master</strong>, folder: <strong>/ (root)</strong>, Save</li>
+    <li>Live at <code>https://dodontommy.github.io/h1b-data-broker</code></li>
+  </ol>
+
+  <div class="tip-box"><strong>Pro tip:</strong> Upload the CSV to Gumroad too. Set up an email capture before the "Buy Now" button to build a list.</div>
+
+  <h4>Step 3: Sell the Data</h4>
+  <table>
+    <tr><th>Channel</th><th>How</th><th>Price</th></tr>
+    <tr><td>Gumroad</td><td>Upload CSV, set price $19</td><td>$19</td></tr>
+    <tr><td>Your site</td><td>The site has "Buy Now" linking to Gumroad</td><td>$19</td></tr>
+    <tr><td>Filtered queries</td><td>Add a contact form, manually fulfill custom queries</td><td>$5-50</td></tr>
+  </table>
+
+  <h4>Step 4: Drive Traffic</h4>
+  <ul>
+    <li><strong>Reddit:</strong> r/data, r/datasets, r/H1B, r/immigration</li>
+    <li><strong>LinkedIn:</strong> Share as "Free sample dataset" for recruiters, upsell full version</li>
+    <li><strong>Twitter:</strong> DM data journalists, visa consultants</li>
+    <li><strong>Cold email:</strong> Recruiting agencies that place H1B candidates</li>
+  </ul>
+
+  <h4>Money Math</h4>
+  <p>10 sales/month at $19 → <strong>$190/mo</strong>. Zero overhead, pure profit.</p>
+</div>
+</section>
+
+<!-- ==================== 4. GUMROAD ==================== -->
+<section id="gumroad" class="project-section">
+<div class="project-header">
+  <h3>4. Gumroad Template Farm</h3>
+  <span class="badge badge-easy">Easy — 20 min</span>
+</div>
+<div class="project-body">
+  <h4>What it is</h4>
+  <p>5 ready-to-sell spreadsheet templates (Budget, Planner, Social Calendar, Invoice, Habit Tracker) + a Notion Life OS dashboard. Each has a product description ready to copy-paste.</p>
+
+  <h4>Step 1: Upload to Gumroad</h4>
+  <ol>
+    <li>Go to <a href="https://gumroad.com" target="_blank">gumroad.com</a> → sign up (free)</li>
+    <li>Click <strong>Add Product</strong></li>
+    <li>Upload the CSV file for each product</li>
+    <li>Copy the product description from <code>gumroad-farm/[template-name]/product-description.txt</code></li>
+    <li>Set price (see table below)</li>
+    <li>Hit <strong>Publish</strong></li>
+    <li>Repeat for all 7 products</li>
+  </ol>
+
+  <h4>Pricing Strategy</h4>
+  <table>
+    <tr><th>Product</th><th>Price</th><th>File</th></tr>
+    <tr><td>Budget Tracker</td><td>$7</td><td>budget-tracker/budget_tracker.csv</td></tr>
+    <tr><td>Project Planner</td><td>$9</td><td>project-planner/project_planner.csv</td></tr>
+    <tr><td>Social Media Calendar</td><td>$7</td><td>social-media-calendar/social_calendar.csv</td></tr>
+    <tr><td>Invoice Template</td><td>$5</td><td>invoice-template/invoice.csv</td></tr>
+    <tr><td>Habit Tracker</td><td>$5</td><td>habit-tracker/habit_tracker.csv</td></tr>
+    <tr><td>Notion Life OS</td><td>$12</td><td>notion-life-os (link)</td></tr>
+    <tr><td><strong>Productivity Bundle</strong></td><td><strong>$19</strong></td><td>All 5 spreadsheets</td></tr>
+  </table>
+
+  <div class="step-box"><strong>✓</strong> Create the bundle by checking "Create a bundle" in Gumroad and adding all 5 spreadsheet products.</div>
+
+  <h4>Step 2: Promote Each Product</h4>
+  <ul>
+    <li><strong>Pinterest:</strong> Pin screenshots of each template with "Get the template" link</li>
+    <li><strong>Twitter:</strong> Search for people asking about productivity templates → reply with your link</li>
+    <li><strong>Etsy:</strong> List there too — Etsy buyers love digital planners</li>
+    <li><strong>YouTube:</strong> Record a 2-min "how I organize my life" video, link in description</li>
+  </ul>
+
+  <div class="tip-box"><strong>Pro tip:</strong> Set up Gumroad affiliates (Settings → Affiliates) at 30% commission. Hundreds of Tiny YouTubers will promote your templates for free.</div>
+
+  <h4>Money Math</h4>
+  <p>10 sales/mo at avg $8 → <strong>$80/mo</strong> passive. 50 sales/mo → <strong>$400/mo</strong>. Takes 1 hour upfront, zero maintenance.</p>
+</div>
+</section>
+
+<!-- ==================== 5. RESALE BOT ==================== -->
+<section id="resale-bot" class="project-section">
+<div class="project-header">
+  <h3>5. Limited Drop Resale Bot</h3>
+  <span class="badge badge-hard">Advanced — 60 min</span>
+</div>
+<div class="project-body">
+  <h4>What it is</h4>
+  <p>A Python CLI tool that monitors Discord and Twitter for product drop announcements (GPUs, sneakers, concert tickets) and alerts you instantly so you can buy before everyone else.</p>
+
+  <h4>Step 1: Get API Keys</h4>
+  <table>
+    <tr><th>Service</th><th>What you need</th><th>Where</th></tr>
+    <tr><td>Twitter</td><td>Bearer Token + API keys</td><td>developer.twitter.com → Free tier</td></tr>
+    <tr><td>Discord</td><td>Bot Token OR Webhook URL</td><td>discord.com/developers → New App</td></tr>
+    <tr><td>2Captcha</td><td>API Key (optional, for auto-buy)</td><td>2captcha.com ($1/1k solves)</td></tr>
+  </table>
+
+  <h4>Step 2: Configure</h4>
+  <pre>cd resale-bot
+cp .env.example .env
+# Edit .env with your keys
+# Set your keywords (comma-separated):
+KEYWORDS=rtx 5090,ps6,travis scott,yeezy,erastour
+
+# Add any Discord webhook URLs:
+DISCORD_WEBHOOK_URLS=https://discord.com/api/webhooks/...
+</pre>
+
+  <div class="step-box"><strong>✓</strong> <code>python bot.py add-keyword "rtx 5090"</code> — adds a keyword from CLI</div>
+
+  <h4>Step 3: Run the Monitor</h4>
+  <pre>python bot.py monitor</pre>
+  <p>This starts polling Discord channels and Twitter for your keywords. When a match is found, it logs the alert and plays a desktop notification sound.</p>
+
+  <h4>Step 4: Act Fast When You Get an Alert</h4>
+  <ul>
+    <li>Bot prints the product, price, and URL</li>
+    <li>You have ~30-120 seconds before stock runs out</li>
+    <li>Have accounts pre-logged at target sites (Amazon, BestBuy, Adidas, Ticketmaster)</li>
+    <li>Use browser auto-fill for checkout speed</li>
+    <li>Flip on StockX (sneakers), eBay (GPU), StubHub (tickets) within 24 hours</li>
+  </ul>
+
+  <h4>Step 5: Profit Calculation Example</h4>
+  <table>
+    <tr><th>Product</th><th>Retail</th><th>Resale</th><th>Profit</th></tr>
+    <tr><td>RTX 5090</td><td>$1,999</td><td>$3,500</td><td>~$1,500</td></tr>
+    <tr><td>Travis Scott sneakers</td><td>$150</td><td>$600</td><td>~$450</td></tr>
+    <tr><td>Taylor Swift floor seats</td><td>$500</td><td>$2,000</td><td>~$1,500</td></tr>
+    <tr><td>PS6 launch bundle</td><td>$600</td><td>$900</td><td>~$300</td></tr>
+  </table>
+
+  <div class="warn-box"><strong>⚠</strong> The bot is a <em>monitor</em> — it alerts you. The auto-buy part is a stub. Full auto-buy would need per-site scripts with captcha solving, which changes every drop. Manual buying with a bot alert is still extremely profitable.</div>
+
+  <h4>Quick Start</h4>
+  <pre>pip install -r requirements.txt
+cp .env.example .env
+# Edit .env with at least 1 Discord webhook URL
+python bot.py add-keyword "ps6"
+python bot.py add-keyword "travis scott"
+python bot.py list-keywords
+python bot.py monitor</pre>
+
+  <h4>Money Math</h4>
+  <p>One successful flip on a GPU launch: <strong>$800-1,500</strong>. Tickets: <strong>$500-2,000</strong>. Sneakers: <strong>$200-500</strong>. This is the highest risk/reward of all 5 projects but also the highest ceiling.</p>
+</div>
+</section>
+
+<!-- Footer section -->
+<section style="background:var(--navy);border-radius:12px;padding:32px;color:#fff;text-align:center">
+  <h3 style="font-size:1.2rem;margin-bottom:8px">You're Fully Loaded</h3>
+  <p style="color:rgba(255,255,255,.5);font-size:.85rem;margin-bottom:16px">
+    5 projects ready to deploy. Pick the easiest one and ship it today.
+  </p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="https://github.com/dodontommy/quickbucks" style="background:var(--teal);color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:.85rem;font-weight:600">Main Repo</a>
+    <a href="https://github.com/dodontommy/vpnreviews-blog" style="background:rgba(255,255,255,.1);color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:.85rem">Affiliate Repo</a>
+    <a href="https://github.com/dodontommy/h1b-data-broker" style="background:rgba(255,255,255,.1);color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-size:.85rem">Data Repo</a>
+  </div>
+</section>
+
+</div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// Highlight active nav link on scroll
+document.querySelectorAll('.sidebar nav a[href^="#"]').forEach(a => {
+  a.addEventListener('click', function() {
+    document.querySelectorAll('.sidebar nav a').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+// Add copy buttons to pre blocks
+document.querySelectorAll('pre').forEach(pre => {
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  btn.onclick = () => { navigator.clipboard.writeText(pre.textContent); btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 2000); };
+  pre.style.position = 'relative';
+  pre.appendChild(btn);
+});
+</script>
+</body>
+</html>
