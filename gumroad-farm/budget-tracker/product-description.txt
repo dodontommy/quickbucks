@@ -1,0 +1,18 @@
+Budget Tracker Spreadsheet
+=========================
+Product Type: Spreadsheet Template (CSV)
+Price: $7
+Tags: finance, budget, personal finance, spreadsheet, template
+
+DESCRIPTION:
+Take control of your finances with this comprehensive budget tracking spreadsheet. Perfect for freelancers, families, and anyone who wants to know exactly where their money goes.
+
+FEATURES:
+- Income & expense tracking across 10+ categories
+- Automatic difference calculation (budgeted vs actual)
+- Monthly overview with visual indicators
+- Easy to customize categories
+- Compatible with Excel, Google Sheets, LibreOffice, and Numbers
+- Clean, professional layout
+
+INSTANT DOWNLOAD - CSV format, ready to import into any spreadsheet software.

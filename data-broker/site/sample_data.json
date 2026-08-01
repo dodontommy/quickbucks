@@ -1,0 +1,37 @@
+[
+  {
+    "company": "NVIDIA CORPORATION",
+    "job_title": "Business Intelligence Engineer",
+    "salary": 208000,
+    "location": "Nashville, TN",
+    "year": 2026
+  },
+  {
+    "company": "NVIDIA CORPORATION",
+    "job_title": "Product Manager",
+    "salary": 188000,
+    "location": "Phoenix, AZ",
+    "year": 2026
+  },
+  {
+    "company": "LINKEDIN CORPORATION",
+    "job_title": "Big Data Engineer",
+    "salary": 178000,
+    "location": "Sunnyvale, CA",
+    "year": 2024
+  },
+  {
+    "company": "SQUARE INC",
+    "job_title": "Network Engineer",
+    "salary": 161000,
+    "location": "Pittsburgh, PA",
+    "year": 2026
+  },
+  {
+    "company": "SERVICENOW INC",
+    "job_title": "Engineering Manager",
+    "salary": 146000,
+    "location": "Santa Clara, CA",
+    "year": 2026
+  }
+]

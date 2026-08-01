@@ -1,0 +1,31 @@
+Invoice #,INV-2026-001
+Date,2026-08-01
+Due Date,2026-08-15
+Status,Unpaid
+
+Bill To,
+Company Name,Client Company Inc.
+Contact,John Smith
+Email,john@client.com
+Address,123 Business St, City, State 12345
+
+From,
+Your Company,Your Business LLC
+Your Name,Your Name
+Email,you@yourcompany.com
+Address,456 Your St, City, State 67890
+
+Item Description,Qty,Rate,Amount
+Web Development Services,40,150,6000
+UI/UX Design Consultation,10,200,2000
+Monthly Retainer,1,3000,3000
+
+Subtotal,11000
+Tax Rate (%),8
+Tax Amount,880
+Total,$11,880
+
+Payment Instructions,
+Bank Account,XXXX-XXXX-XXXX-1234
+Routing,XXXXX-XXX
+Payment Terms,Net 15

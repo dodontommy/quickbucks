@@ -1,0 +1,21 @@
+Notion Life OS Dashboard
+========================
+Product Type: Notion Template
+Price: $12
+Tags: notion, productivity, life os, dashboard, template
+
+DESCRIPTION:
+The ultimate Life OS dashboard for Notion. Transform your chaotic life into an organized system with this all-in-one template.
+
+INCLUDES:
+- Master Dashboard with quick stats
+- Task Manager with priority matrix
+- Goal Tracking (yearly, quarterly, monthly)
+- Habit Tracker with streak counter
+- Finance Dashboard
+- Content Calendar
+- Project Hub
+- Meeting Notes Database
+- Journal with prompts
+
+SETUP: Duplicate into your Notion workspace. Ready in 5 minutes.
